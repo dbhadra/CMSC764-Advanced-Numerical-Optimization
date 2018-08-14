@@ -1,0 +1,88 @@
+\documentclass{article} 
+
+% include some useful things
+\usepackage{verbatim}  % for printing unformatted text
+\usepackage{float}         % for controlling the location of figure and graphics on the page
+\usepackage{blindtext}
+\usepackage{graphicx}\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{amssymb}
+%  Begin writing content below this line
+\begin{document}
+
+%  Print your name and the assignment number
+\begin{center}{\huge  Deepayan Bhadra - hmwk1 Solutions}\end{center}
+
+\section*{Solution to Q1}
+
+Hilbert matrices are known for being ill-conditioned. Thus, due to the high condition number, the noise amplifies during reconstruction. The amplification added to the trailing eigen-vector is $1/\lambda_{min}$ 
+
+
+\section*{Solution to Q2}
+The dual norm of $\|\cdot\|$ is defined as
+$$\|x\|_*  = \max_{\|z\|\le 1} z^Tx.$$
+We need to prove that the dual norm is indeed a norm. Thus, we need to verify if the dual norm satisfies the properties of a norm as follows:\\ \newline
+1. $||x||$  $\geq$ 0 $\forall$ x$\in R^n$, and $||x||$ = 0 iff x = 0 (Non-negativity)\newline 
+2. $||\alpha x||$ = $|\alpha|||x|| \quad\forall x \in R^n \quad\forall \alpha \in R$ (Homogeneity) \newline
+3. Triangle inequality: $||x+y|| \leq ||x|| + ||y|| \quad \forall x,y \in R^n$
+\\\\
+The first two properties are easy to verify as follows: \newline
+
+1. $z$ can always be chosen such $||x||_* \geq 0$. Since $z$ can also be $> 0$, $||x||_*=0$ iff $x=0$. Hence.    
+
+2. $\|\alpha x\|_*  = \max_{\|z\|\le 1} z^T (\alpha x) = |\alpha| \max_{\|z\|\le 1} z^Tx = |\alpha|\|x\|_* $
+
+3. $||x+y||_* = \max_{\|z\|\le 1} (z^Tx + z^Ty) \leq  \max_{\|z\|\le 1} z^Tx +  \max_{\|z\|\le 1} z^Ty = \|x\|_* + \|y\|_*$
+
+
+\section*{Solution to Q3}
+
+We have $||\hat{x} - x|| = ||A^{-1} \hat{b} - A^{-1} b|| \leq ||A^{-1}||||\hat{b}-b|| $ \newline \newline Also, $||Ax|| = ||b|| \leq ||A||||x|| $ \newline \newline Dividing the first inequality by the latter one yields \newline \newline $\frac{||\hat{x}-x||}{||A||||x||} \leq \frac{||A^{-1}||||\hat{b}-b||}{||b||} $ \newline \newline Condition number of a square nonsingular matrix A is defined as $||A||.||A||^{-1}$ \newline Thus re-arranging the inequality, we get our desired result. 
+
+
+\section*{Solution to Q4}
+We have \\\\
+$p(y|x) = \frac{1}{\sqrt{(2\pi)^m|\Sigma|}} exp\big( -\frac{1}{2}(y-Dx)^T\Sigma^{-1}(y-Dx)\big) $
+$p(x) = \Pi_{i} \frac{1}{2b}exp(-\frac{|x_i|}{b}) = \frac{1}{(2b)^n} exp(-\frac{||x||_1}{b}) $
+From Baye's rule, we have \\\\ 
+$ p(x|y) \sim p(y|x)p(x) = \frac{1}{\sqrt{(2\pi)^m|\Sigma|}} exp \big( -\frac{1}{2}(y-Dx)^T\Sigma^{-1}(y-Dx) \big) \frac{1}{(2b)^n}exp(-\frac{||x||_1}{b}) $ 
+The log-likelihood (LL) follows by taking log \\\\
+$-\frac{m}{2}log(2\pi) -\frac{1}{2}log|\Sigma| -\frac{1}{2} (y-Dx)^T\Sigma^{-1}(y-Dx) - nlog(2b) -\frac{1}{b}||x||_1 $ \\\\
+The negative log-likelihood (NLL) occurs by multiplying with -1 and re-arranging :\\\\
+$ \frac{1}{b}||x||_1 + \frac{1}{2}(y-Dx)^T\Sigma^{-1}(y-Dx) + \frac{1}{2}(mlog(2\pi) + log|\Sigma|) + nlog(2b) $ \\\\
+For minimization, we can ignore the constant terms and simply : \\\\
+Minimize $ \frac{1}{b}||x||_1 + \frac{1}{2}(y-Dx)^T\Sigma^{-1}(y-Dx). $
+
+\newpage % Put the console output on a fresh page to make it look all pretty.
+\section*{Solution to Q5:  Code from hmwk1.py}
+% The verbatim environment is good for reproducing text without having latex try to format it for you.
+\begin{verbatim}
+
+import numpy as np
+def buildmat(m,n,condNumber):
+    A = np.random.randn(m, n)
+    np.linalg.cond(A)
+    U, S, V = np.linalg.svd(A)
+    S = np.array([[S[j] if i==j else 0 for j in range(n)] for i in range(m)])   
+    S[S!=0]= np.linspace(condNumber,1,min(m,n))
+    A=U.dot(S).dot(V)
+    return A
+# For a 3x5 matrix
+    
+m,n,condNumber = 3,5,2
+print("The 3x5 matrix A and the condition no. are\n")
+A = buildmat(m,n,condNumber)
+print(np.matrix(A),"\n")
+print(np.linalg.cond(A),"\n")
+
+# For a 5x4 matrix
+    
+m,n,condNumber = 5,4,4
+print("The 5x4 matrix A and the condition no. are\n")
+A = buildmat(m,n,condNumber)
+print(np.matrix(A),"\n")
+print(np.linalg.cond(A),"\n")
+
+\end{verbatim}
+
+\end{document}
