@@ -1,0 +1,2 @@
+$ cat .gitattributes
+*.tex linguist-language = Python
