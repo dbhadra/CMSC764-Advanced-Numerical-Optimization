@@ -50,8 +50,7 @@ def load_mnist():
         y_train = y_train[:]
     return x_test,x_train,y_test,y_train
 
-#Q2(b) This function will implement the “SoftPlus” non-linearity  
-#      which is a smoothed form of the RELU#
+#Q2(b) This function will implement the “SoftPlus” non-linearity which is a smoothed form of the RELU#
 
 def softplus(X):
     y = np.zeros(X.shape)
@@ -61,8 +60,7 @@ def softplus(X):
     y[X>=0] = xp+[math.log(np.exp(-x)+1) for x in xp];
     return y
 
-# Q2(c) This function will implement cross-entropy loss
-#      (measures the performance of a classification model) 
+# Q2(c) This function will implement cross-entropy loss (measures the performance of a classification model) 
 
 def cross_entropy(X,Y):
     Xm = X - np.max(X,axis = 1, keepdims = True)
@@ -113,8 +111,7 @@ def div2d(G):
 #  create diagonal matrix in decomposition K=F'DF
     Dx = np.fft.fft2(kernel)
     
-#  Use the eigen-decomposition to convolve the stencil with X, and get the
-#  differences in the horizontal direction.
+#  Use the eigen-decomposition to convolve the stencil with X, and get the differences in the horizontal direction.
     Divx = np.fft.ifft2(Dx*np.fft.fft2(Gx))
     
     kernel = np.zeros(Gy.shape)
