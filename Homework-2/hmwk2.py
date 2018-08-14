@@ -206,3 +206,5 @@ if __name__ == "__main__":
     print('first inner product = \t',left,'\n')
     print('second inner product = \t',right)
     
+    # EOF
+    
