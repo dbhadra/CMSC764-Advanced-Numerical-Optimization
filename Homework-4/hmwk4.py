@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import scipy as sp
+import numpy.linalg as nla
 from math import pi
 from scipy.spatial.distance import pdist, squareform, cdist
 from sklearn.cluster import KMeans
@@ -23,7 +24,7 @@ def richardson(A,b,x,t):
     all_res = []
     while resids > 10e-6:
         x = x+t*(b-A(x))
-        resids = np.linalg.norm(b-A(x),'fro')
+        resids = nla.norm(b-A(x),'fro')
         all_res = np.append(all_res,resids)
     return all_res,x
 
@@ -33,7 +34,7 @@ def conjgrad(A,b,x):
     tol = 10e-6;
     xk = x; rk = b-A(xk); pk = rk # Initial values 
     res = [];
-    while np.linalg.norm(rk)>tol:
+    while nla.norm(rk)>tol:
         grad = A(pk);
         alpk = np.dot(rk.flatten(),rk.flatten())/(np.dot(pk.flatten(),
                                                      grad.flatten()))
@@ -43,7 +44,7 @@ def conjgrad(A,b,x):
                                                            rk.flatten()))
         pk = rkk+betak*pk;
         rk = rkk;
-        res = np.append(res,np.linalg.norm(rk,'fro')) 
+        res = np.append(res,nla.norm(rk,'fro')) 
         # Storing all the residuals 
         
     return x,resids
@@ -122,7 +123,7 @@ if __name__ == "__main__":
     
     # Q1(f) to compute exact solutions using FFT    
     print('The norm of the gradient of the objective function is')
-    np.linalg.norm(f(l2denoise(b,mu)))
+    nla.norm(f(l2denoise(b,mu)))
     
     # Q2(a) Building a dataset for Spectral Clustering
     
@@ -143,7 +144,7 @@ if __name__ == "__main__":
     S_hat = np.diagflat(temp).dot(S).dot(np.diagflat(temp))
     
     # Q2(c) to compute the EVD of normalized S. 
-    E,V = np.linalg.eig(S_hat)
+    E,V = nla.eig(S_hat)
     idx = E.argsort()[::-1]
     E = E[idx]
     V = V[:,idx]
@@ -179,7 +180,7 @@ if __name__ == "__main__":
                                                      axis=1,keepdims = True) 
     M_e = np.sum(Z,axis=1,keepdims = True)+ np.transpose(np.sum(Z,
                                                      axis=0,keepdims = True)
-                                                    .dot(np.linalg.inv(W))
+                                                    .dot(nla.inv(W))
                                                     .dot(np.transpose(Z))) 
     diagD = np.concatenate([W_m,M_e],axis=0)
     temp = np.multiply(np.repeat(diagD,200,axis=1),C)
@@ -190,15 +191,15 @@ if __name__ == "__main__":
     
     # Q3(c)
     
-    W_hat = W_n + sp.linalg.sqrtm(np.linalg.inv(W_n)).dot(np.transpose(M_n)).dot(M_n).dot(sp.linalg.sqrtm(np.linalg.inv(W_n))) 
+    W_hat = W_n + sp.linalg.sqrtm(nla.inv(W_n)).dot(np.transpose(M_n)).dot(M_n).dot(sp.linalg.sqrtm(nla.inv(W_n))) 
     # Orthogonalization matrix 
     
-    D_w,U_w = np.linalg.eig(W_hat)
+    D_w,U_w = nla.eig(W_hat)
     D_w,U_w = np.real(D_w), np.real(U_w) 
     
     # Eigen-decomposition W_hat = V*D*V' 
     
-    U = np.matmul(C_n,np.matmul(sp.linalg.sqrtm(np.linalg.inv(W_n)),U_w))*np.power(np.expand_dims(D_w,axis=-1),-0.5).T
+    U = np.matmul(C_n,np.matmul(sp.linalg.sqrtm(nla.inv(W_n)),U_w))*np.power(np.expand_dims(D_w,axis=-1),-0.5).T
     
     idx = np.argsort(D_w)[::-1]
     U_w = U_w[idx]
