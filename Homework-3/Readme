@@ -1,3 +1,9 @@
 
+A brief overview of topics covered in this Homework are as follows:
+
+Gradient checker
+Gradient of Logistic Regression, L1 norm, Total Variation, Neural net objective
+
+
 This homework was written in both MATLAB and Python following a bet that the student still knew the former just as well 
 even though the latter was his go-to language now.

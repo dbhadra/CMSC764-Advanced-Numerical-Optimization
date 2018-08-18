@@ -1,1 +1,1 @@
-
+Write a function with signature M = buildmat (m,n,condNumber) that returns an m×n matrix with condition number condNumber.
